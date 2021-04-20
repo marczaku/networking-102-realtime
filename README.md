@@ -1,43 +1,81 @@
 # GP20-2021-0419-Realtime-Gameserver
-Make sure, that .NET Core 5 SDK is installed from https://www.microsoft.com/net/download
+
+## Goal of this Assignment
+The goal of this assignment is to introduce you to Game-Server-Development using `C#` and the `TCP` and `UDP` Protocols.\
+In total, our steps will include:
+- Create a small Time-Server using TCP Technology
+- Build a Unity Client to connect to that server and receive the time
+- Build a small Word-Game-Server using UDP Technology
+- Build a Unity Client to connect to that server and play the game
+- Build a Game similar to Agar.io
+ - A game server that handles multiple player states
+ - A unity client that 
+   - can display those players' states
+   - and forward any input to the server
+
+## Prerequisites / Requirements
+- Make sure, that .NET Core 5 SDK is installed from https://www.microsoft.com/net/download \
+- I recommend to use Jetbrains Rider as an IDE.\
+- Install Unity Hub & Unity.
 
 
 ## Part 1 - Time Server:
 
-First, let’s do a few demo projects:\
-Create a folder named TimeServer\
+### Preparing a Project
+Create a folder named `TimeServer`\
 Open the Terminal in that Folder
+- On Windows, you can Use `cmd` or `PowerShell`.
+- On Mac, use the `Terminal`-Application.
+One way would be to open the Terminal (cmd on windows) and type in `cd PATH`, for example: `cd C:/Users/...`.\ 
+Make sure to put quotation marks around the path or to escape it, if you have white spaces in it.
 
-If you do not know, how to do that, google.\
-One way would be to open the Terminal (cmd on windows) and type in cd PATH, for example: cd C:/Users/…. Make sure to put quotation marks around the path or to escape it, if you have white spaces in it.
+Now, validate, that you are in the correct folder, by using `pwd`\
+Now, use the command `dotnet new console`\
+If it says `dotnet not found`, you have probably not installed .NET Core 5 SDK, yet.\
+Else, this command should have created a new C# Project for you. You can go ahead and open the `.csproj`-File in your IDE.\
 
-Now, validate, that you are in the correct folder, by using `pwd`.
-Now, use the command `dotnet new console`
-If it says `dotnet` not found, you have probably not installed .NET Core 5 SDK, yet.
+Before continuing work, we should create a `.gitignore` in your `TimeServer`-Folder that ignores anything we don't want to commit.\
+For C# Console Projects, that's at least the `/bin/` and `/obj/`-Folders.\
+You might find a nice C# Console / Rider / Visual Studio `.gitignore`-Template on the web.\
+Aftwerwards, you may safely go ahead and create a new commit `adds time server project`
 
-This command should have created a new C# Project for you. You can go ahead and open the `.csproj`-File in Rider.
-
-Okay, for our small demo project, let’s build a small time-server using TCP.
+### Implementation
+Okay, for our small demo project, let’s build a small time-server using TCP.\
 The idea is, that anybody can connect to this server and our server will respond with the current time.
 
-You will need: The `TcpListener`-class found in `System.Net.Sockets`.
-`Start` will start the listener.
-The `AcceptTcpClient`-Method handles the acknowledgement of new connections for you.
-`GetStream` on the `Client` gets you the current stream used for the client.
-`Encoding.ASCII.GetBytes` Can convert a String to ASCII-Bytes for you.
-The `Write`-Method on the Stream allows you to send Bytes over the socket.
-You need to call `Close` on the `Stream` as well as the `Client` when you are done with the client.
-`Stop` will stop the listener. Only do this on Server Shutdown.
+You will need: 
+- The `TcpListener`-class found in `System.Net.Sockets`.
+ - `Start` will start the listener.
+ - `AcceptTcpClient`-Method handles the acknowledgement of new connections for you. It returns a `TcpClient`.
+ - `Stop` needs to be called when you do not want to listen for packets on this port anymore.
+- The `TcpClient`-class is returned by `AcceptTcpClient`.
+ - `GetStream` gets you the current stream used for the client. It returns a `Stream`.
+ - `Close` needs to be called when you are done using the `TcpClient`.
+- The `Stream`-class is returned by `GetStream`
+ - `Write` allows you to send Bytes over the socket.
+ - `Close` needs to be called when you are done sending bytes over the stream.
+- `DateTime.Now` Gives you the current Date & Time.
+ - `ToString` returns you a nicely formatted `string`.
+- `Encoding.ASCII.GetBytes` Can convert a `string` to ASCII-`byte[]` for you.
 
-Your task is to, whenever a client got accepted (so when `AcceptTcpClient` stopped blocking), to send a message sending the current DateTime (DateTime.Now) back to that client and then close the Stream and Client again.
-This means, that whenever someone connects via TCP, our Server will send the Time and close the connection.
-Neat little TimeServer.
-You can Run the Code within Rider using the Play Button.
-Not much will happen, yet, though.
-We need a Client to Connect in order to see, whether everything works.
+So, what is our server supposed to do?
+- Open a Socket (Listen on a Socket for TCP Messages)
+- Then, for as long as you want the server to run (Maybe, start with forever, or rather until you Stop Execution in Rider)
+ - Accept a new Client that tries to connect (It will automatically wait for that to happen)
+ - Get a data stream from that client that allows Reading and Writing data
+ - On that stream, send the current DateTime Encoded into Bytes (You may as well just send `"Hello"` first)
+ - Close the stream
+ - Close the client
+This means, that whenever someone connects via TCP, our Server will send the Time and close the connection.\
+Neat little TimeServer.\
+You can Run the Code within Rider using the Play Button.\
+Not much will happen, yet, though.\
+We need a Client to Connect in order to see, whether everything works.\
 
-=> Test, what happens, if you start listening to the same port on multiple clients. Or listen to a port that is already listened on.
-=> Google "How to see listening UDP ports on Windows/MacOS"
+### Considerations:
+- What will happen, if you try to listen on a port that is already in use?
+- How can you find out, what ports are currently listened on on your computer?
+- What could in total go wrong?
 
 
 ## Part 2 - TCP Client:
