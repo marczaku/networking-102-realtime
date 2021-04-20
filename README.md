@@ -14,12 +14,15 @@ In total, our steps will include:
     - and forward any input to the server
 
 ## Prerequisites / Requirements
-- Make sure, that .NET Core 5 SDK is installed from https://www.microsoft.com/net/download \
+- Make sure, that .NET Core 5 SDK is installed from https://www.microsoft.com/net/download
 - I recommend to use Jetbrains Rider as an IDE.\
 - Install Unity Hub & Unity.
 
 
 ## Part 1 - Time Server:
+
+### Goal
+To have a time-server, where anyone can connect to using TCP to retrieve the current date and time.
 
 ### Preparing a Project
 Create a folder named `TimeServer`\
@@ -27,7 +30,7 @@ Open the Terminal in that Folder
 - On Windows, you can Use `cmd` or `PowerShell`.
 - On Mac, use the `Terminal`-Application.
 
-One way would be to open the Terminal and type in `cd PATH`, for example: `cd C:/Users/...`.\ 
+One way would be to open the Terminal and type in `cd PATH`, for example: `cd C:/Users/...`.\
 Make sure to put quotation marks around the path or to escape it, if you have white spaces in it.
 
 Now, validate, that you are in the correct folder, by using `pwd`\
@@ -38,12 +41,9 @@ Else, this command should have created a new C# Project for you. You can go ahea
 Before continuing work, we should create a `.gitignore` in your `TimeServer`-Folder that ignores anything we don't want to commit.\
 For C# Console Projects, that's at least the `/bin/` and `/obj/`-Folders.\
 You might find a nice C# Console / Rider / Visual Studio `.gitignore`-Template on the web.\
-Aftwerwards, you may safely go ahead and create a new commit `adds time server project`
+Afterwards, you may safely go ahead and create a new commit `adds time server project`
 
 ### Implementation
-Okay, for our small demo project, let’s build a small time-server using TCP.\
-The idea is, that anybody can connect to this server and our server will respond with the current time.
-
 You will need: 
 - The `TcpListener`-class found in `System.Net.Sockets`.
   - `Start` will start the listener.
@@ -67,7 +67,8 @@ So, what is our server supposed to do?
   - On that stream, send the current DateTime Encoded into Bytes (You may as well just send `"Hello"` first)
   - Close the stream
   - Close the client
-This means, that whenever someone connects via TCP, our Server will send the Time and close the connection.\
+
+This means, that whenever someone connects via TCP, our Server will send the current Date and Time and close the connection.\
 Neat little TimeServer.\
 You can Run the Code within Rider using the Play Button.\
 Not much will happen, yet, though.\
@@ -130,7 +131,7 @@ Do this all endlessly in a loop and your Server should run until the end of our 
 Well, our UDP Server is standing.
 You can Run it using the Play Button in Rider.
 
-Again, it won't du much, until someone sends us info.
+Again, it won't do much, until someone sends us info.
 You can use `nc -u 127.0.0.1 11000` in the Terminal to connect to your server and send text.
 
 
