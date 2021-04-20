@@ -8,10 +8,10 @@ In total, our steps will include:
 - Build a small Word-Game-Server using UDP Technology
 - Build a Unity Client to connect to that server and play the game
 - Build a Game similar to Agar.io
- - A game server that handles multiple player states
- - A unity client that 
-   - can display those players' states
-   - and forward any input to the server
+  - A game server that handles multiple player states
+  - A unity client that 
+    - can display those players' states
+    - and forward any input to the server
 
 ## Prerequisites / Requirements
 - Make sure, that .NET Core 5 SDK is installed from https://www.microsoft.com/net/download \
@@ -26,7 +26,8 @@ Create a folder named `TimeServer`\
 Open the Terminal in that Folder
 - On Windows, you can Use `cmd` or `PowerShell`.
 - On Mac, use the `Terminal`-Application.
-One way would be to open the Terminal (cmd on windows) and type in `cd PATH`, for example: `cd C:/Users/...`.\ 
+
+One way would be to open the Terminal and type in `cd PATH`, for example: `cd C:/Users/...`.\ 
 Make sure to put quotation marks around the path or to escape it, if you have white spaces in it.
 
 Now, validate, that you are in the correct folder, by using `pwd`\
@@ -45,27 +46,27 @@ The idea is, that anybody can connect to this server and our server will respond
 
 You will need: 
 - The `TcpListener`-class found in `System.Net.Sockets`.
- - `Start` will start the listener.
- - `AcceptTcpClient`-Method handles the acknowledgement of new connections for you. It returns a `TcpClient`.
- - `Stop` needs to be called when you do not want to listen for packets on this port anymore.
+  - `Start` will start the listener.
+  - `AcceptTcpClient`-Method handles the acknowledgement of new connections for you. It returns a `TcpClient`.
+  - `Stop` needs to be called when you do not want to listen for packets on this port anymore.
 - The `TcpClient`-class is returned by `AcceptTcpClient`.
- - `GetStream` gets you the current stream used for the client. It returns a `Stream`.
- - `Close` needs to be called when you are done using the `TcpClient`.
+  - `GetStream` gets you the current stream used for the client. It returns a `Stream`.
+  - `Close` needs to be called when you are done using the `TcpClient`.
 - The `Stream`-class is returned by `GetStream`
- - `Write` allows you to send Bytes over the socket.
- - `Close` needs to be called when you are done sending bytes over the stream.
+  - `Write` allows you to send Bytes over the socket.
+  - `Close` needs to be called when you are done sending bytes over the stream.
 - `DateTime.Now` Gives you the current Date & Time.
- - `ToString` returns you a nicely formatted `string`.
+  - `ToString` returns you a nicely formatted `string`.
 - `Encoding.ASCII.GetBytes` Can convert a `string` to ASCII-`byte[]` for you.
 
 So, what is our server supposed to do?
 - Open a Socket (Listen on a Socket for TCP Messages)
 - Then, for as long as you want the server to run (Maybe, start with forever, or rather until you Stop Execution in Rider)
- - Accept a new Client that tries to connect (It will automatically wait for that to happen)
- - Get a data stream from that client that allows Reading and Writing data
- - On that stream, send the current DateTime Encoded into Bytes (You may as well just send `"Hello"` first)
- - Close the stream
- - Close the client
+  - Accept a new Client that tries to connect (It will automatically wait for that to happen)
+  - Get a data stream from that client that allows Reading and Writing data
+  - On that stream, send the current DateTime Encoded into Bytes (You may as well just send `"Hello"` first)
+  - Close the stream
+  - Close the client
 This means, that whenever someone connects via TCP, our Server will send the Time and close the connection.\
 Neat little TimeServer.\
 You can Run the Code within Rider using the Play Button.\
