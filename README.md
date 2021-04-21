@@ -153,7 +153,10 @@ Now:
 
 
 ### Goal
-Let’s create a small Mini-Game Server.\
+Creating an Open Game Server for a small Word Game.\
+Players can send Words to the Server that builds them into sentences and sends the full sentence back.
+
+Rules:
 - The server can receive any segments sent to its Port via UDP.
   - It only allows a single word to be sent at a time.
     - How can you validate, that only one word was sent?
@@ -168,7 +171,7 @@ And it every time sends the whole text back to the client.
 ### Preparing a Project
 You need to create a new Folder named `./OpenWord-MMO`.\
 Then use `dotnet new console` in that directory to create another console project.\
-Ahem, `.gitignore`
+Ahem, `.gitignore`!
 
 ### Implementation
 You will need:
@@ -194,18 +197,18 @@ What is your server supposed to do?
     - `Send` your complete message over your `UdpClient` by passing in your message converted to bytes. And sending it to the `IPEndPoint` received by the `Receive`-Method as a `ref`-Parameter.
 - `Close` everything when we're done.
 
-
-You need to create a new `System.Net.Sockets.UdpClient` and pass it a port number that you want to use.
-For example `11000`.
-Now, the way, this API works, is:
+Details:\
+You need to create a new `System.Net.Sockets.UdpClient` and pass it a port number that you want to use.\
+For example `11000`.\
+Now, the way, this API works, is:\
 ```cs
 var remoteEP = new IPEndPoint(IPAddress.Any, 11000); 
 var data = udpClient.Receive(ref remoteEP);
 ```
 
-The IP filters, what IP addresses we want to filter on.
-It is passed as a ref parameter, so that the Receive Function can change its value.
-When we receive data, the remoteEP will actually contain the IP Address and Port Number of whoever just sent us bytes.
+The IP filters, what IP addresses we want to filter on.\
+It is passed as a ref parameter, so that the Receive Function can change its value.\
+When we receive data, the remoteEP will actually contain the IP Address and Port Number of whoever just sent us bytes.\
 Therefore, we can use it to send back information.
 
 To respond, you can use `udpClient.Send(bytes, bytesLength, remoteEP);` to send a response.
