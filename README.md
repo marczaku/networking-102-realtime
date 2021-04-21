@@ -13,6 +13,22 @@ In total, our steps will include:
     - can display those players' states
     - and forward any input to the server
 
+## Grading
+|Grade  |  Requirement |
+|-------|:-------------|
+|Summa Cum laude (A*)| Agar.io playable in Multiplayer.\*\*|
+| Magna Cum Laude (A)| Agar.io playable with Server. Other players may behave glitchy.\*\*|
+|Cum Laude (B)| 6 Points of Agar.io done. (or Bonus for Clean Code\*)|
+|Passed (C)| 3 Points of Agar.io done. (or Bonus for Clean Code\*)|
+|Barely Passed (D)| UDP OpenWord-MMO Server and Client implemented. |
+|Insufficient (E)| TCP Time Server and Client implemented. |
+|Failed (F)| |
+-------------------------------
+Each of these grades expects the previous requirements as well as its own requirements to be fulfilled.\
+\* Bonus for Clean Code requires ALL previous requirements to be fulfilled as well as the Code to be tidy and cleaned up.\
+\*\* For these grades, it's more important to show that the network communication is happening. Gameplay goes second.
+
+
 ## Prerequisites / Requirements
 - Make sure, that .NET Core 5 SDK is installed from https://www.microsoft.com/net/download
 - I recommend to use Jetbrains Rider as an IDE.\
@@ -20,6 +36,9 @@ In total, our steps will include:
 
 
 ## Part 1 - Time Server:
+
+<img width="250" alt="image" src="https://user-images.githubusercontent.com/7360266/115594022-8cdd9e00-a2d5-11eb-8dd3-d9ec6b7ba7c6.png">
+
 
 ### Goal
 To have a time-server, where anyone can connect to using TCP to retrieve the current date and time.
@@ -73,6 +92,13 @@ Neat little TimeServer.\
 You can Run the Code within Rider using the Play Button.\
 Not much will happen, yet, though.\
 We need a Client to Connect in order to see, whether everything works.\
+If you install `netcat` on Windows, or if you're on a Mac or Linux System:\
+You can use `nc -v 127.0.0.1 44444` where `127.0.0.1` is the server's ip and `44444` is the server's port number.
+To test your Timeserver.
+
+<img width="706" alt="image" src="https://user-images.githubusercontent.com/7360266/115593725-28224380-a2d5-11eb-9541-548f4f52ce16.png">
+
+
 
 ### Considerations:
 - What will happen, if you try to listen on a port that is already in use?
@@ -82,35 +108,93 @@ We need a Client to Connect in order to see, whether everything works.\
 
 ## Part 2 - TCP Client:
 
-Okay, now let’s build a client: Create a Unity 2D Project and name it `Agario`
-We will reuse this project for all of our game server test scripts.
+<img width="361" alt="image" src="https://user-images.githubusercontent.com/7360266/115593918-6a4b8500-a2d5-11eb-9b06-65a67958089b.png">
 
-In Unity, we want to try to connect to our TimeServer.
-In Unity, we will need the `TcpClient`-class together with the correct port number (used in the `TcpListener`)
-Now, you got a `Client`, just as from `AcceptTcpClient` on `TcpListener`.
-So, you again can call `GetStream`
-And on that function, you can call `Read` to read information.
-It will return bytes, which you need to convert to a string again.
-If you think about how you converted a string to bytes, you might come up with a solution to this problem.
-Are you able to Add this Logic to a GetTime-Script and call it from a Button and print the output to a `UnityEngine.UI.Text`? :)
+
+### Goal
+Having a Unity Client that is able to create a TCP Connection to our server.\
+In order to request the current Date & Time and Display it to the User.
+
+### Preparing a Project
+Create a Unity 2D Project and name it `Agario`.\
+We will reuse this project for all of our game server test scripts.\
+Do not forget to add a `.gitignore` to this Folder.
+
+### Preparing the Scene
+We need a `Canvas`, a `Text` for the Time-Output and a `Button` that the user can click in order to request the time.\
+
+### Implementation
+You will need: 
+- The `TcpClient`-class which can be created by using its constructor together with arguments for the ip address as well as the port number.
+  - `GetStream` again gets you the current stream used for the client. It returns a `Stream`.
+  - `Close` needs to be called when you are done using the `TcpClient`.
+- The `Stream`-class is returned by `GetStream`
+  - `Read` allows you to read Bytes over the socket.
+  - `Close` needs to be called when you are done sending bytes over the stream.
+- `Encoding.ASCII.GetBytes` Was able to Convert a `string` to `byte[]`.
+  - Try to find out, what other method might be able to convert `byte[]` to a `string`. 
+
+Create a class named `RequestServerTime` that inherits from `MonoBehavior` and put said Script on a `GameObject` with the same name.\
+Create a public instance method named `SendRequest` and call that method on the `Button`-Component that you have created before.\
+
+Now:
+- Use the `TcpClient`-class together with the correct port number (the same port number used in Part 1 on the `TcpListener`)\
+= Again, call `GetStream` on that client.\
+- On that `Stream`, you can call `Read` to read information.
+- It will return `byte[]`, which you need to convert to a `string` again.
+  - If you think about how you converted a `string` to `byte[]`, you might come up with a solution to this problem.
+- Outut the converted string to the `Text` that you have placed in your scene.
+  - Come up with a solution of how to get a reference to said `Text`-Component.
 
 
 ## Part 3 - OpenWord-MMO-Server
 
-Alright, now, let’s continue with UDP.
-Let’s create a small Mini-Game Server.
-The idea is, that the server accepts any segments sent via UDP.
-It only allows a single word to be sent at a time.
-How can you validate, that only one word was sent?
-Also, it only allows words to have up to 20 characters per word.
-How can you validate, that the word is not too long?
-What the server does, is, it remembers the text that was sent and adds the next text after a whitespace behind it. And so on.
-And it every time sends the whole text back to the client.
-So, if someone sends “Hi”, it will respond “Hi” If then, someone sends “Welcome”, it will respond “Hi Welcome”
-Someone sends “World”, it will respond “Hi Welcome World” etc.
+<img width="482" alt="image" src="https://user-images.githubusercontent.com/7360266/115595752-9536d880-a2d7-11eb-84d2-21dffa25aa84.png">
 
-You need to create a new Project in a Folder named `OpenWord-MMO`
-Then use `dotnet new console` in that directory to create another console project.
+
+### Goal
+Let’s create a small Mini-Game Server.\
+- The server can receive any segments sent to its Port via UDP.
+  - It only allows a single word to be sent at a time.
+    - How can you validate, that only one word was sent?
+  - Also, it only allows words to have up to 20 characters per word.
+    - How can you validate, that the word is not too long?
+- It remembers the text that was sent before and adds the new word, that was sent just now, after a whitespace behind it.
+And it every time sends the whole text back to the client.
+  - ClientA: -> "Hi" -> Server -> "Hi" -> ClientA
+  - ClientB: -> "Welcome" -> Server -> "Hi Welcome" -> ClientB
+  - ClientA: -> "World" -> Server -> "Hi Welcome World" -> ClientA
+
+### Preparing a Project
+You need to create a new Folder named `./OpenWord-MMO`.\
+Then use `dotnet new console` in that directory to create another console project.\
+Ahem, `.gitignore`
+
+### Implementation
+You will need:
+- The `UdpClient`-class which can be found in `System.Net.Sockets`.
+  - The constructor in which you can pass a port number. 
+  - The `Receive(ref remoteEndPoint)`-Method to receive data from that socket.
+    - The return type is `byte[]` and gives you the information that was received.
+    - The `ref remoteEndpoint`-Argument will be filled by the method to contain the EndPoint (IP+Port) that has sent you the packet.
+  - The `Send(bytes, bytesLength, remoteEndpoint)`-Method to send data on that socket.
+    - `bytes` and `bytesLength` contain a `byte[]` of your data that you want to send, as well as the length of said array.
+    - `remoteEndpoint` should be the address of the remote that you want to send data to.
+
+What is your server supposed to do?
+- Store the complete message in a variable.
+- Create a `UdpClient` with a Port of your choice.
+- While you want the server to run (maybe, forever? Then use `true`)
+  - `Receive` data from that `UdpClient`
+  - Validate the data that you have received according to your server's rules:
+    - only one word, not longer than 20 characters, ...
+  - If it is not valid, handle the error somehow.
+  - If it is valid:
+    - Add the new word with a whitespace to your complete message.
+    - `Send` your complete message over your `UdpClient` by passing in your message converted to bytes. And sending it to the `IPEndPoint` received by the `Receive`-Method as a `ref`-Parameter.
+- `Close` everything when we're done.
+
+
 You need to create a new `System.Net.Sockets.UdpClient` and pass it a port number that you want to use.
 For example `11000`.
 Now, the way, this API works, is:
@@ -137,6 +221,9 @@ You can use `nc -u 127.0.0.1 11000` in the Terminal to connect to your server an
 
 ## Part 4 - UDP Client:
 
+<img width="958" alt="image" src="https://user-images.githubusercontent.com/7360266/115594257-cf06df80-a2d5-11eb-91ba-225dd29ef2b6.png">
+
+
 Now, in Unity, you’ll have to do it the other way round.
 Now, you should send a word to your OpenWord-MMO-Port.
 To do that, you need an `Input`-`TextField` And a Send-`Button` to send the Input from the Text-Field.\
@@ -156,9 +243,6 @@ So, whenever the server decided, that the input was not okay.
 
 
 ## Part 5 - Agar.io
-
-Barely Passed: 0 Points done. (But everything before)\
-Passed: 3 Points done.
 
 For the last part, we are going to implement what we got for implementing our own version of Agar.io
 
