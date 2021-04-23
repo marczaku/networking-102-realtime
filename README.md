@@ -34,6 +34,11 @@ Each of these grades expects the previous requirements as well as its own requir
 - I recommend to use Jetbrains Rider as an IDE.\
 - Install Unity Hub & Unity.
 
+## Remarks
+- In the first four exercises, we are not using any advanced classes for working with `Streams`
+  - it is slightly tedious, but it will teach you about how `byte[]` can be used as buffers
+- Refer to the Slides `030 - Internet` for details on TCP / UDP.
+
 
 ## Part 1 - Time Server:
 
@@ -154,7 +159,8 @@ Now:
 
 ### Goal
 Creating an Open Game Server for a small Word Game.\
-Players can send Words to the Server that builds them into sentences and sends the full sentence back.
+Players can send Words to the Server that builds them into sentences and sends the full sentence back.\
+Clients do not have to explicitly connect to the Game. They can simply participate by sending data to the Server.\
 
 Rules:
 - The server can receive any segments sent to its Port via UDP.
@@ -180,6 +186,7 @@ You will need:
   - The `Receive(ref remoteEndPoint)`-Method to receive data from that socket.
     - The return type is `byte[]` and gives you the information that was received.
     - The `ref remoteEndpoint`-Argument will be filled by the method to contain the EndPoint (IP+Port) that has sent you the packet.
+    - The value that `ref remoteEndpoint` when you give it into this method does not matter.
   - The `Send(bytes, bytesLength, remoteEndpoint)`-Method to send data on that socket.
     - `bytes` and `bytesLength` contain a `byte[]` of your data that you want to send, as well as the length of said array.
     - `remoteEndpoint` should be the address of the remote that you want to send data to.
@@ -226,6 +233,9 @@ You can use `nc -u 127.0.0.1 11000` in the Terminal to connect to your server an
 
 <img width="958" alt="image" src="https://user-images.githubusercontent.com/7360266/115594257-cf06df80-a2d5-11eb-91ba-225dd29ef2b6.png">
 
+
+### Goal
+We want to develop a Client in Unity in which we can enter a Word into an Input-T
 
 Now, in Unity, you’ll have to do it the other way round.
 Now, you should send a word to your OpenWord-MMO-Port.
