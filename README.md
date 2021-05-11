@@ -132,6 +132,7 @@ We need a `Canvas`, a `Text` for the Time-Output and a `Button` that the user ca
 You will need: 
 - The `TcpClient`-class which can be created by using its constructor together with arguments for the ip address as well as the port number.
   - `GetStream` again gets you the current stream used for the client. It returns a `Stream`.
+  - `Connect` connects to a tcpListener. Enter the ipaddress and port number of the TimeServer's TcpListener here.
   - `Close` needs to be called when you are done using the `TcpClient`.
 - The `Stream`-class is returned by `GetStream`
   - `Read` allows you to read Bytes over the socket.
