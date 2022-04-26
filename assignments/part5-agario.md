@@ -43,3 +43,15 @@ A few difficult challenges:
 Create a new Scene named `Agario` and open it.\
 Do what needs to be done ;)
 
+## Prerequisites
+- Create one or more Sequence Diagrams that show what your server and your clients are communicating to each other.
+  - Especially for Connect, Disconnect and Position Update
+  - Decide, what Protocols you want to use
+    - What would be the choice for best performance?
+    - What's the easiest choice?
+- Implement a Model for the Player on the Server
+  - What information do you need to store per player?
+  - Use maybe a List or a Dictionary to hold all connected players
+- Implement a Model for the Orbs on the Server
+  - What information do you need to store per orb?
+  - Use maybe a List or a Dictionary to hold all spawned orbs
