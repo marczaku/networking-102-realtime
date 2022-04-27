@@ -34,6 +34,7 @@ Each of these grades expects the previous requirements as well as its own requir
 For Testing you can either...
 - Run multiple Clients on one Computer
 - Use multiple computers on the same Local Area Network (LAN)
+  - You can also use VPNs or Software like Hamachi to fake a Remote-LAN
 - Or configure Port Forwarding in your Router for a certain Port or Port Range (Security Risk)
   - Make the router forward e.g. Port 4444 to your Computer's Local IP (usually 192.168.0.xxx)
   - Run the Server on Port 4444
