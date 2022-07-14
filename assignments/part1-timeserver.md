@@ -20,6 +20,7 @@ Commit
 ## Prerequisites
 You will need: 
 - The `TcpListener`-class found in `System.Net.Sockets`.
+  - `TcpListener(int port)` will open a Socket for incoming connections on the given port.
   - `Start` will start the listener.
   - `AcceptTcpClient`-Method handles the acknowledgement of new connections for you. It returns a `TcpClient`.
   - `Stop` needs to be called when you do not want to listen for packets on this port anymore.
@@ -27,8 +28,9 @@ You will need:
   - `GetStream` gets you the current stream used for the client. It returns a `Stream`.
   - `Close` needs to be called when you are done using the `TcpClient`.
 - The `Stream`-class is returned by `GetStream`
-  - `Write` allows you to send Bytes over the socket.
-  - `Close` needs to be called when you are done sending bytes over the stream.
+  - `Write` allows you to send Bytes over the socket. This will be buffered for performance reason.
+  - `Flush` will actually send all buffered bytes.
+  - `Close` needs to be called when you are done sending bytes over the stream. This will also invoke `Flush`
 - `DateTime.Now` Gives you the current Date & Time.
   - `ToString` returns you a nicely formatted `string`.
 - `Encoding.ASCII.GetBytes` Can convert a `string` to ASCII-`byte[]` for you.
