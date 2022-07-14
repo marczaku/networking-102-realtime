@@ -50,8 +50,10 @@ Neat little TimeServer.\
 You can Run the Code within Rider using the Play Button.\
 Not much will happen, yet, though.\
 We need a Client to Connect in order to see, whether everything works.\
-If you install `netcat` on Windows, or if you're on a Mac or Linux System:\
-You can use `nc -v 127.0.0.1 44444` where `127.0.0.1` is the server's ip and `44444` is the server's port number.
+On Mac or Linux, you can:
+- use `nc -v 127.0.0.1 44444` where `127.0.0.1` is the server's ip and `44444` is the server's port number.
+On Windows, you need to install [NCat](https://nmap.org/ncat/) and then you can:
+- use `ncat -v 127.0.0.1 44444` where `127.0.0.1` is the server's ip and `44444` is the server's port number.
 To test your Timeserver.
 
 <img width="706" alt="image" src="https://user-images.githubusercontent.com/7360266/115593725-28224380-a2d5-11eb-9541-548f4f52ce16.png">
