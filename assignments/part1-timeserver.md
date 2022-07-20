@@ -47,6 +47,8 @@ So, what is our server supposed to do?
 
 This means, that whenever someone connects via TCP, our Server will send the current Date and Time and close the connection.\
 Neat little TimeServer.\
+
+## How to Test
 You can Run the Code within Rider using the Play Button.\
 Not much will happen, yet, though.\
 We need a Client to Connect in order to see, whether everything works.\
