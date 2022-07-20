@@ -34,9 +34,18 @@ Create a public instance method named `SendRequest` and call that method from th
 
 Now:
 - Use the `TcpClient`-class together with the correct port number (the same port number used in Part 1 on the `TcpListener`)\
-= Again, call `GetStream` on that client.\
+- Again, call `GetStream` on that client.\
 - On that `Stream`, you can call `Read` to read information.
 - It will return `byte[]`, which you need to convert to a `string` again.
   - If you think about how you converted a `string` to `byte[]`, you might come up with a solution to this problem.
 - Output the converted string to the `Text` that you have placed in your scene.
   - Come up with a solution of how to get a reference to said `Text`-Component.
+
+## How To Test
+
+- Make sure, the Time Server Project is open and Running.
+- In Unity, make sure, the `TimeClient`-Scene is open.
+- Now, start the Play Mode in your Unity Project.
+- Click the Button. Your Unity Client should now make a request to the Time Server.
+- Validate that the current Date and Time is displayed in Unity.
+- Make sure, your Time Server has not crashed.
